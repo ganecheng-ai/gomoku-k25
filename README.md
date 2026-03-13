@@ -112,6 +112,17 @@ gomoku_YYYYMMDD_HHMMSS.log
 
 ## 更新日志
 
+### v1.0.1 (2025-03-13)
+
+- **亮点介绍**
+  - 修复 CI/CD 构建流程
+  - 支持 Windows、Linux、macOS 全平台自动构建
+
+- **问题修复**
+  - 修复 assets 目录缺失导致构建失败的问题
+  - 修复 macOS 构建中 --icon=NONE 参数错误
+  - 修复 macOS onefile + windowed 模式冲突
+
 ### v1.0.0 (2025-03-13)
 
 - **亮点介绍**
