@@ -73,10 +73,61 @@ class Renderer:
         """加载音效"""
         self.sounds = {}
         try:
-            # 创建简单的音效（如果没有文件）
-            pass  # 音效可选，暂不强制加载
+            pygame.mixer.init()
+            # 使用程序生成简单音效，避免依赖外部文件
+            self.sounds['place'] = self._generate_place_sound()
+            self.sounds['win'] = self._generate_win_sound()
+            log_info("音效系统初始化完成")
         except Exception as e:
-            log_info(f"音效加载失败: {e}")
+            log_info(f"音效系统初始化失败: {e}")
+
+    def _generate_place_sound(self):
+        """生成落子音效"""
+        try:
+            # 创建一个短暂的点击音效
+            sample_rate = 44100
+            duration = 0.1  # 100ms
+            frequency = 800  # Hz
+            samples = []
+            import math
+            for i in range(int(sample_rate * duration)):
+                # 衰减正弦波
+                decay = 1 - (i / (sample_rate * duration))
+                value = int(8000 * decay * math.sin(2 * math.pi * frequency * i / sample_rate))
+                samples.append(value)
+            # 转换为 pygame Sound
+            import array
+            sound_buffer = array.array('h', samples).tobytes()
+            return pygame.mixer.Sound(buffer=sound_buffer)
+        except Exception:
+            return None
+
+    def _generate_win_sound(self):
+        """生成胜利音效"""
+        try:
+            sample_rate = 44100
+            duration = 0.3
+            import math
+            samples = []
+            # 三个音调组成胜利音效
+            for freq in [523, 659, 784]:  # C5, E5, G5
+                for i in range(int(sample_rate * duration / 3)):
+                    decay = 1 - (i / (sample_rate * duration / 3))
+                    value = int(10000 * decay * math.sin(2 * math.pi * freq * i / sample_rate))
+                    samples.append(value)
+            import array
+            sound_buffer = array.array('h', samples).tobytes()
+            return pygame.mixer.Sound(buffer=sound_buffer)
+        except Exception:
+            return None
+
+    def play_sound(self, sound_name):
+        """播放指定音效"""
+        if sound_name in self.sounds and self.sounds[sound_name]:
+            try:
+                self.sounds[sound_name].play()
+            except Exception:
+                pass
 
     def to_screen_pos(self, row, col):
         """将棋盘坐标转换为屏幕坐标"""
@@ -166,7 +217,7 @@ class Renderer:
                     is_last = (last_move == (row, col))
                     self.draw_stone(row, col, board[row][col], is_last)
 
-    def draw_ui(self, current_player, state, move_count):
+    def draw_ui(self, current_player, state, move_count, elapsed_time=0):
         """绘制UI界面"""
         # 绘制顶部面板
         panel_rect = pygame.Rect(0, 0, WINDOW_WIDTH, 70)
@@ -187,6 +238,11 @@ class Renderer:
             player_text = "平局!"
             player_color = (100, 100, 100)
 
+        # 格式化时间显示
+        minutes = int(elapsed_time // 60)
+        seconds = int(elapsed_time % 60)
+        time_text = f"时间: {minutes:02d}:{seconds:02d}"
+
         # 渲染文字
         title_surface = self.font_medium.render("五子棋", True, COLOR_TEXT)
         self.screen.blit(title_surface, (20, 15))
@@ -198,6 +254,10 @@ class Renderer:
         step_text = f"步数: {move_count}"
         step_surface = self.font_small.render(step_text, True, COLOR_TEXT)
         self.screen.blit(step_surface, (450, 20))
+
+        # 时间显示
+        time_surface = self.font_small.render(time_text, True, COLOR_TEXT)
+        self.screen.blit(time_surface, (600, 20))
 
     def draw_buttons(self):
         """绘制按钮"""

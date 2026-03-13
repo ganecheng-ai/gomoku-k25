@@ -3,6 +3,7 @@
 """
 
 import pygame
+import time
 
 try:
     from .board import Board
@@ -37,6 +38,11 @@ class GomokuGame:
         # 游戏状态
         self.running = True
         self.game_over = False
+
+        # 计时器
+        self.start_time = time.time()
+        self.elapsed_time = 0
+        self.timer_running = True
 
         log_info("五子棋游戏初始化完成")
 
@@ -104,25 +110,34 @@ class GomokuGame:
     def make_move(self, row, col):
         """在指定位置落子"""
         if self.board.make_move(row, col):
+            # 播放落子音效
+            self.renderer.play_sound('place')
             if self.board.state != STATE_PLAYING:
                 self.game_over = True
+                self.timer_running = False
+                self.renderer.play_sound('win')
                 log_info(f"游戏结束，状态: {self.board.state}")
 
     def undo_move(self):
         """悔棋"""
         if self.board.undo_move():
             self.game_over = False
+            self.timer_running = True
             log_info("悔棋成功")
 
     def restart_game(self):
         """重新开始游戏"""
         self.board.reset()
         self.game_over = False
+        self.start_time = time.time()
+        self.elapsed_time = 0
+        self.timer_running = True
         log_info("重新开始游戏")
 
     def update(self):
         """更新游戏状态"""
-        pass  # 当前没有需要更新的状态
+        if self.timer_running:
+            self.elapsed_time = time.time() - self.start_time
 
     def render(self):
         """渲染游戏画面"""
@@ -132,11 +147,12 @@ class GomokuGame:
         # 绘制棋子
         self.renderer.draw_pieces(self.board.get_board(), self.board.get_last_move())
 
-        # 绘制UI
+        # 绘制UI（包含计时器）
         self.renderer.draw_ui(
             self.board.get_current_player(),
             self.board.state,
-            self.board.get_move_count()
+            self.board.get_move_count(),
+            self.elapsed_time
         )
 
         # 绘制按钮
