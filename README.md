@@ -120,6 +120,18 @@ gomoku_YYYYMMDD_HHMMSS.log
 
 ## 更新日志
 
+### v1.0.5 (2026-03-13)
+
+- **亮点介绍**
+  - 彻底解决 PyInstaller 打包后启动报错问题
+  - 修复 v1.0.3 版本中遗留的模块导入问题
+
+- **问题修复**
+  - 修复 `FileNotFoundError: No such file or directory: '...\game.py'` 错误
+  - 移除 main.py 中的动态导入代码，该代码在打包环境中无法工作
+  - 添加 `--paths .` 参数到 PyInstaller 配置，确保模块正确解析
+  - 修复 Windows 构建产物的路径处理问题
+
 ### v1.0.4 (2026-03-13)
 
 - **亮点介绍**
