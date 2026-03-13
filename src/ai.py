@@ -19,11 +19,11 @@ class GomokuAI:
     """五子棋 AI 类"""
 
     # 棋型评分表（从高到低）
-    SCORE_FIVE = 1000000           # 连五
-    SCORE_FOUR = 100000            # 活四
-    SCORE_FOUR_BLOCKED = 5000      # 冲四
-    SCORE_THREE = 5000             # 活三
-    SCORE_THREE_BLOCKED = 500      # 眠三
+    SCORE_FIVE = 1000000           # 连五（必胜）
+    SCORE_FOUR = 100000            # 活四（必胜）
+    SCORE_FOUR_BLOCKED = 50000     # 冲四（需要阻止）
+    SCORE_THREE = 10000            # 活三（有威胁）
+    SCORE_THREE_BLOCKED = 1000     # 眠三
     SCORE_TWO = 500                # 活二
     SCORE_TWO_BLOCKED = 50         # 眠二
     SCORE_ONE = 10                 # 活一
