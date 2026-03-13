@@ -2,8 +2,6 @@
 棋盘类 - 管理棋盘状态和胜负判定
 """
 
-import numpy as np
-
 try:
     from .config import BOARD_SIZE, STATE_BLACK_WIN, STATE_WHITE_WIN, STATE_DRAW, STATE_PLAYING
     from .utils import log_info, log_debug
@@ -27,7 +25,7 @@ class Board:
 
     def reset(self):
         """重置棋盘"""
-        self.board = np.zeros((self.size, self.size), dtype=int)
+        self.board = [[self.EMPTY for _ in range(self.size)] for _ in range(self.size)]
         self.current_player = self.BLACK
         self.move_history = []
         self.state = STATE_PLAYING
