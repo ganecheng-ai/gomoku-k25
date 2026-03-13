@@ -88,12 +88,8 @@ jobs:
         pyinstaller --onedir --windowed \
           --name gomoku \
           --add-data "../assets:assets" \
-          --icon=NONE \
           main.py
         cd dist
-        # 创建 Applications 文件夹结构
-        mkdir -p Gomoku.app/Contents/MacOS
-        cp -r gomoku.app/Contents/* Gomoku.app/Contents/ 2>/dev/null || cp -r gomoku/* Gomoku.app/Contents/MacOS/ 2>/dev/null || true
         # 打包为 dmg
         hdiutil create -volname "Gomoku" -srcfolder gomoku.app -ov -format UDZO gomoku-macos-universal.dmg
 
