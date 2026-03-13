@@ -35,6 +35,7 @@
 - [x] Linux (.tar.gz) 打包
 - [x] macOS (.dmg) 打包
 - [x] 自动发布 Release
+- [x] 修复打包后模块导入问题
 
 ## 项目结构
 ```

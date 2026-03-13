@@ -62,6 +62,11 @@ jobs:
         pyinstaller --onefile --windowed \
           --name gomoku \
           --add-data "../assets:assets" \
+          --hidden-import game \
+          --hidden-import board \
+          --hidden-import renderer \
+          --hidden-import config \
+          --hidden-import utils \
           --icon=NONE \
           main.py
         cd dist
@@ -74,6 +79,11 @@ jobs:
         pyinstaller --onefile --windowed `
           --name gomoku `
           --add-data "../assets;assets" `
+          --hidden-import game `
+          --hidden-import board `
+          --hidden-import renderer `
+          --hidden-import config `
+          --hidden-import utils `
           --icon=NONE `
           main.py
         move dist\gomoku.exe ..
@@ -88,6 +98,11 @@ jobs:
         pyinstaller --onedir --windowed \
           --name gomoku \
           --add-data "../assets:assets" \
+          --hidden-import game \
+          --hidden-import board \
+          --hidden-import renderer \
+          --hidden-import config \
+          --hidden-import utils \
           main.py
         cd dist
         # 打包为 dmg

@@ -112,6 +112,17 @@ gomoku_YYYYMMDD_HHMMSS.log
 
 ## 更新日志
 
+### v1.0.3 (2026-03-13)
+
+- **亮点介绍**
+  - 修复打包后程序启动报错的严重问题
+  - 优化 CI/CD 构建流程，确保所有模块正确打包
+
+- **问题修复**
+  - 修复 PyInstaller 打包后 `ModuleNotFoundError: No module named 'game'` 错误
+  - 在 GitHub Actions 中添加 `--hidden-import` 参数确保所有模块被打包
+  - 优化 main.py 的导入逻辑，支持打包后的环境
+
 ### v1.0.2 (2026-03-13)
 
 - **亮点介绍**

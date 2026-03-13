@@ -24,7 +24,18 @@ else:
 
 sys.path.insert(0, base_dir)
 
-from game import main
+# 尝试导入，处理打包后的环境
+try:
+    from game import main
+except ImportError:
+    # 打包后的环境，使用绝对导入
+    import importlib.util
+    game_path = os.path.join(base_dir, 'game.py')
+    spec = importlib.util.spec_from_file_location('game', game_path)
+    game_module = importlib.util.module_from_spec(spec)
+    sys.modules['game'] = game_module
+    spec.loader.exec_module(game_module)
+    main = game_module.main
 
 if __name__ == "__main__":
     main()
