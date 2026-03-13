@@ -6,5 +6,5 @@ from .renderer import Renderer
 from .config import *
 from .utils import log_info, log_error, log_warning
 
-__version__ = "1.0.0"
+__version__ = "1.0.5"
 __author__ = "gomoku-k25"
