@@ -164,9 +164,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         body_path: release_notes.md
-        files: |
-          artifacts/**/*
-          artifacts/checksums.txt
+        files: artifacts/**/*
         draft: false
         prerelease: false
       env:
