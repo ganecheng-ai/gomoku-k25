@@ -89,6 +89,14 @@ gomoku-k25/
 └── README.md              # 项目说明
 ```
 
+## 测试
+
+运行单元测试：
+
+```bash
+python -m unittest discover tests/ -v
+```
+
 ## 打包
 
 使用 PyInstaller 打包为可执行文件：
