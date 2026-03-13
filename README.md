@@ -120,6 +120,16 @@ gomoku_YYYYMMDD_HHMMSS.log
 
 ## 更新日志
 
+### v1.0.4 (2026-03-13)
+
+- **亮点介绍**
+  - 优化 CI/CD 工作流配置
+  - 准备支持 Node.js 24 运行时
+
+- **优化改进**
+  - 添加 `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` 环境变量
+  - 修复 GitHub Actions Node.js 20 弃用警告
+
 ### v1.0.3 (2026-03-13)
 
 - **亮点介绍**
