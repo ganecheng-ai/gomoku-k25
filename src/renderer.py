@@ -4,6 +4,8 @@
 
 import pygame
 import os
+import math
+import array
 
 try:
     from .config import *
@@ -89,14 +91,12 @@ class Renderer:
             duration = 0.1  # 100ms
             frequency = 800  # Hz
             samples = []
-            import math
             for i in range(int(sample_rate * duration)):
                 # 衰减正弦波
                 decay = 1 - (i / (sample_rate * duration))
                 value = int(8000 * decay * math.sin(2 * math.pi * frequency * i / sample_rate))
                 samples.append(value)
             # 转换为 pygame Sound
-            import array
             sound_buffer = array.array('h', samples).tobytes()
             return pygame.mixer.Sound(buffer=sound_buffer)
         except Exception:
@@ -107,7 +107,6 @@ class Renderer:
         try:
             sample_rate = 44100
             duration = 0.3
-            import math
             samples = []
             # 三个音调组成胜利音效
             for freq in [523, 659, 784]:  # C5, E5, G5
@@ -115,7 +114,6 @@ class Renderer:
                     decay = 1 - (i / (sample_rate * duration / 3))
                     value = int(10000 * decay * math.sin(2 * math.pi * freq * i / sample_rate))
                     samples.append(value)
-            import array
             sound_buffer = array.array('h', samples).tobytes()
             return pygame.mixer.Sound(buffer=sound_buffer)
         except Exception:
