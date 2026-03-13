@@ -14,28 +14,19 @@
 import sys
 import os
 
-# 添加 src 目录到路径
+# 添加当前目录到路径（兼容开发和打包环境）
 if getattr(sys, 'frozen', False):
-    # 打包后的环境
+    # 打包后的环境 - PyInstaller 的临时目录
     base_dir = sys._MEIPASS
 else:
     # 开发环境
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
-sys.path.insert(0, base_dir)
+if base_dir not in sys.path:
+    sys.path.insert(0, base_dir)
 
-# 尝试导入，处理打包后的环境
-try:
-    from game import main
-except ImportError:
-    # 打包后的环境，使用绝对导入
-    import importlib.util
-    game_path = os.path.join(base_dir, 'game.py')
-    spec = importlib.util.spec_from_file_location('game', game_path)
-    game_module = importlib.util.module_from_spec(spec)
-    sys.modules['game'] = game_module
-    spec.loader.exec_module(game_module)
-    main = game_module.main
+# 导入游戏主函数
+from game import main
 
 if __name__ == "__main__":
     main()

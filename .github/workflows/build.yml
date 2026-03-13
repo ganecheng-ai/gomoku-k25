@@ -64,6 +64,7 @@ jobs:
         cd src
         pyinstaller --onefile --windowed \
           --name gomoku \
+          --paths . \
           --add-data "../assets:assets" \
           --hidden-import game \
           --hidden-import board \
@@ -81,6 +82,7 @@ jobs:
         cd src
         pyinstaller --onefile --windowed `
           --name gomoku `
+          --paths . `
           --add-data "../assets;assets" `
           --hidden-import game `
           --hidden-import board `
@@ -89,9 +91,8 @@ jobs:
           --hidden-import utils `
           --icon=NONE `
           main.py
-        move dist\gomoku.exe ..
+        move dist\gomoku.exe ..\gomoku-windows-x64.exe
         cd ..
-        ren gomoku.exe gomoku-windows-x64.exe
 
     - name: Build executable (macOS)
       if: matrix.target == 'macos'
@@ -100,6 +101,7 @@ jobs:
         # macOS 使用 onedir 模式避免 onefile + windowed 冲突
         pyinstaller --onedir --windowed \
           --name gomoku \
+          --paths . \
           --add-data "../assets:assets" \
           --hidden-import game \
           --hidden-import board \
