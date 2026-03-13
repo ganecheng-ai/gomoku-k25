@@ -9,10 +9,10 @@ import array
 
 try:
     from .config import *
-    from .utils import log_info, get_resource_path
+    from .utils import log_info
 except ImportError:
     from config import *
-    from utils import log_info, get_resource_path
+    from utils import log_info
 
 class Renderer:
     """游戏渲染器类"""
