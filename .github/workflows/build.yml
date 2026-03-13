@@ -144,7 +144,7 @@ jobs:
       run: |
         # 从标签信息生成发布说明
         cat > release_notes.md << 'EOF'
-        ## 五子棋游戏 v${{ github.ref_name }}
+        ## 五子棋游戏 ${{ github.ref_name }}
 
         ### 下载
         - Windows: `gomoku-windows-x64.exe`
