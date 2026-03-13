@@ -68,6 +68,7 @@ jobs:
           --add-data "../assets:assets" \
           --hidden-import game \
           --hidden-import board \
+          --hidden-import ai \
           --hidden-import renderer \
           --hidden-import config \
           --hidden-import utils \
@@ -86,6 +87,7 @@ jobs:
           --add-data "../assets;assets" `
           --hidden-import game `
           --hidden-import board `
+          --hidden-import ai `
           --hidden-import renderer `
           --hidden-import config `
           --hidden-import utils `
@@ -105,6 +107,7 @@ jobs:
           --add-data "../assets:assets" \
           --hidden-import game \
           --hidden-import board \
+          --hidden-import ai \
           --hidden-import renderer \
           --hidden-import config \
           --hidden-import utils \

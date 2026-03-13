@@ -14,6 +14,7 @@ except ImportError:
     from config import *
     from utils import log_info
 
+
 class Renderer:
     """游戏渲染器类"""
 
@@ -139,6 +140,59 @@ class Renderer:
         row = round((y - self.board_offset_y) / CELL_SIZE)
         return (row, col)
 
+    def draw_mode_selection(self):
+        """绘制游戏模式选择界面"""
+        # 绘制背景
+        self.screen.fill(COLOR_BACKGROUND)
+
+        # 绘制标题
+        title_surface = self.font_large.render("五子棋", True, COLOR_TEXT)
+        title_rect = title_surface.get_rect(center=(WINDOW_WIDTH // 2, 150))
+        self.screen.blit(title_surface, title_rect)
+
+        # 副标题
+        subtitle_surface = self.font_medium.render("选择游戏模式", True, COLOR_TEXT)
+        subtitle_rect = subtitle_surface.get_rect(center=(WINDOW_WIDTH // 2, 220))
+        self.screen.blit(subtitle_surface, subtitle_rect)
+
+        # 按钮参数
+        button_width = 250
+        button_height = 60
+        button_y = WINDOW_HEIGHT // 2 - 30
+        spacing = 80
+
+        # 人人对战按钮
+        self.pvp_btn_rect = pygame.Rect(
+            WINDOW_WIDTH // 2 - button_width // 2,
+            button_y - spacing,
+            button_width,
+            button_height
+        )
+        self._draw_button(self.pvp_btn_rect, "人人对战", COLOR_BUTTON_BG)
+
+        # 人机对战按钮
+        self.pve_btn_rect = pygame.Rect(
+            WINDOW_WIDTH // 2 - button_width // 2,
+            button_y + spacing,
+            button_width,
+            button_height
+        )
+        self._draw_button(self.pve_btn_rect, "人机对战", COLOR_BUTTON_BG)
+
+        # 绘制说明文字
+        hint_text = "鼠标点击选择模式 | ESC 退出"
+        hint_surface = self.font_small.render(hint_text, True, COLOR_TEXT)
+        hint_rect = hint_surface.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 100))
+        self.screen.blit(hint_surface, hint_rect)
+
+    def get_mode_button_clicked(self, x, y):
+        """获取模式选择按钮点击"""
+        if hasattr(self, 'pvp_btn_rect') and self.pvp_btn_rect.collidepoint(x, y):
+            return "pvp"
+        if hasattr(self, 'pve_btn_rect') and self.pve_btn_rect.collidepoint(x, y):
+            return "pve"
+        return None
+
     def draw_board(self):
         """绘制棋盘"""
         # 绘制背景
@@ -215,7 +269,7 @@ class Renderer:
                     is_last = (last_move == (row, col))
                     self.draw_stone(row, col, board[row][col], is_last)
 
-    def draw_ui(self, current_player, state, move_count, elapsed_time=0):
+    def draw_ui(self, current_player, state, move_count, elapsed_time=0, mode_text=""):
         """绘制UI界面"""
         # 绘制顶部面板
         panel_rect = pygame.Rect(0, 0, WINDOW_WIDTH, 70)
@@ -245,17 +299,22 @@ class Renderer:
         title_surface = self.font_medium.render("五子棋", True, COLOR_TEXT)
         self.screen.blit(title_surface, (20, 15))
 
+        # 游戏模式显示
+        if mode_text:
+            mode_surface = self.font_small.render(f"模式: {mode_text}", True, COLOR_TEXT)
+            self.screen.blit(mode_surface, (130, 20))
+
         status_surface = self.font_small.render(player_text, True, player_color)
-        self.screen.blit(status_surface, (200, 20))
+        self.screen.blit(status_surface, (300, 20))
 
         # 步数显示
         step_text = f"步数: {move_count}"
         step_surface = self.font_small.render(step_text, True, COLOR_TEXT)
-        self.screen.blit(step_surface, (450, 20))
+        self.screen.blit(step_surface, (520, 20))
 
         # 时间显示
         time_surface = self.font_small.render(time_text, True, COLOR_TEXT)
-        self.screen.blit(time_surface, (600, 20))
+        self.screen.blit(time_surface, (700, 20))
 
     def draw_buttons(self):
         """绘制按钮"""
@@ -263,15 +322,19 @@ class Renderer:
         button_y = WINDOW_HEIGHT - 60
 
         # 悔棋按钮
-        self.undo_btn_rect = pygame.Rect(150, button_y, 100, button_height)
+        self.undo_btn_rect = pygame.Rect(80, button_y, 80, button_height)
         self._draw_button(self.undo_btn_rect, "悔棋", COLOR_BUTTON_BG)
 
         # 重新开始按钮
-        self.restart_btn_rect = pygame.Rect(300, button_y, 120, button_height)
+        self.restart_btn_rect = pygame.Rect(180, button_y, 100, button_height)
         self._draw_button(self.restart_btn_rect, "重新开始", COLOR_BUTTON_BG)
 
+        # 返回菜单按钮
+        self.menu_btn_rect = pygame.Rect(300, button_y, 100, button_height)
+        self._draw_button(self.menu_btn_rect, "主菜单", COLOR_BUTTON_BG)
+
         # 退出按钮
-        self.quit_btn_rect = pygame.Rect(500, button_y, 100, button_height)
+        self.quit_btn_rect = pygame.Rect(420, button_y, 80, button_height)
         self._draw_button(self.quit_btn_rect, "退出", COLOR_BUTTON_BG)
 
     def _draw_button(self, rect, text, color):
@@ -313,6 +376,18 @@ class Renderer:
         hint_rect = hint_surface.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 20))
         self.screen.blit(hint_surface, hint_rect)
 
+    def draw_ai_thinking(self):
+        """绘制 AI 思考提示"""
+        # 半透明背景
+        overlay = pygame.Surface((200, 50))
+        overlay.set_alpha(200)
+        overlay.fill((50, 50, 50))
+        self.screen.blit(overlay, (WINDOW_WIDTH // 2 - 100, 80))
+
+        text_surface = self.font_small.render("AI 思考中...", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, 105))
+        self.screen.blit(text_surface, text_rect)
+
     def is_on_board(self, x, y):
         """检查坐标是否在棋盘区域内"""
         min_x = self.board_offset_x - CELL_SIZE // 2
@@ -327,6 +402,8 @@ class Renderer:
             return 'undo'
         if hasattr(self, 'restart_btn_rect') and self.restart_btn_rect.collidepoint(x, y):
             return 'restart'
+        if hasattr(self, 'menu_btn_rect') and self.menu_btn_rect.collidepoint(x, y):
+            return 'menu'
         if hasattr(self, 'quit_btn_rect') and self.quit_btn_rect.collidepoint(x, y):
             return 'quit'
         return None
