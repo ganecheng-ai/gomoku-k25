@@ -195,7 +195,7 @@ class GomokuGame:
             log_info("AI 正在思考...")
 
             # 获取 AI 落子位置
-            board_state = self.board.get_board().tolist()
+            board_state = self.board.get_board()
             move = self.ai.get_move(board_state, self.ai_player)
 
             self.ai_thinking = False
